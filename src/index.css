@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	@font-face {
+		font-family: 'TT Interphases Pro';
+		src: url('/src/assets/fonts/TT-Interphases-Pro-Variable.woff2') format('woff2');
+		font-style: normal;
+		font-display: swap;
+		font-weight: 100 900;
+	}
+
+	body {
+		@apply w-screen h-screen leading-relaxed text-white bg-black font-interphases selection:bg-white selection:text-black;
+	}
+}
