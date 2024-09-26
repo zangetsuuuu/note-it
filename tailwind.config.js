@@ -5,7 +5,18 @@ export default {
     "./src/**/*.{js,jsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        interphases: ['TT Interphases Pro', 'sans-serif'],
+      },
+      colors: {
+        'black': '#0e0e10',
+        'white': '#f7f7f8',
+      },
+      container: {
+        center: true,
+      },
+    },
   },
   plugins: [],
 }
