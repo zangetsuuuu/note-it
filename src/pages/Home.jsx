@@ -1,19 +1,27 @@
 import { useState, useEffect } from 'react';
-import Icon from '../components/Icon';
+import { formatDate } from '../helpers/utils';
 import MetaTags from '../components/MetaTags';
 import Container from '../components/Container';
 import Navbar from '../components/Navbar';
 import Search from '../components/Search';
 import Grid from '../components/Grid';
 import Card from '../components/Card';
+import EmptyState from '../components/EmptyState';
 
 const Home = () => {
 	const [notes, setNotes] = useState([]);
+	const [search, setSearch] = useState('');
 
 	useEffect(() => {
-		const storedNotes = JSON.parse(localStorage.getItem('notes')) || [];
-		setNotes(storedNotes);
+		const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
+		setNotes(savedNotes);
 	}, []);
+
+	const filteredNotes = notes.filter(
+		(note) =>
+			note.title.toLowerCase().includes(search.toLowerCase()) ||
+			note.description.toLowerCase().includes(search.toLowerCase())
+	);
 
 	return (
 		<>
@@ -24,18 +32,21 @@ const Home = () => {
 			/>
 			<Container>
 				<Navbar />
-				<Search />
-				{notes.length > 0 ? (
+				<Search search={search} setSearch={setSearch} />
+				{filteredNotes.length > 0 ? (
 					<Grid>
-						{notes.map((note, index) => (
-							<Card key={index} title={note.title} desc={note.description} date={note.date} />
+						{filteredNotes.map((note) => (
+							<Card
+								key={note.id}
+								id={note.id}
+								title={note.title}
+								desc={note.description}
+								date={formatDate(note.date)}
+							/>
 						))}
 					</Grid>
 				) : (
-					<div className="flex items-center justify-center space-x-2 h-[32rem] lg:h-[28rem] opacity-60">
-						<Icon name="CircleAlert" size="20" />
-						<p className="text-center">You don&apos;t have any notes</p>
-					</div>	
+					<EmptyState message={search ? `No notes match your search for "${search}".` : "You haven't created any notes yet"} />
 				)}
 			</Container>
 		</>
